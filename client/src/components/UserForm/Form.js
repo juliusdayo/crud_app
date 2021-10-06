@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { createUser } from '../../actions/users';
 const Form = ()=>{
     const [userData,setUserData ] = useState({
-        firstName: '', lastName:'', gender:'',age:0,birthdate:''
+        firstName: '', lastName:'', gender:'',age:'',birthdate:''
     });
     const dispatch = useDispatch();
     
@@ -14,6 +14,18 @@ const Form = ()=>{
         dispatch(createUser(userData))
         console.log(userData)
     }
+    const calculateAge = (date) =>{
+        const birthdate = new Date(date);
+        const monthDiff = Date.now() - birthdate.getTime();
+        const ageDiff  = new Date(monthDiff);
+        const year = ageDiff.getUTCFullYear();
+        const aget = Math.abs(year-1970);
+        setUserData({...userData,age:aget})
+        console.log(aget)
+        return aget
+        
+    }
+    
 
     return(
 
@@ -25,7 +37,7 @@ const Form = ()=>{
                 <CardHeader title="Add User"/>
 {/* First Name */}
                 <TextField v
-                alue={userData.firstName} 
+                value={userData.firstName} 
                 name="firstName" 
                 variant="standard" 
                 label="First Name" 
@@ -38,7 +50,8 @@ const Form = ()=>{
                 name="lastName" 
                 variant="standard" 
                 label="Last Name" 
-                size="small"/>
+                size="small"
+                required/>
                 <TextField 
                 value={userData.gender}
                 onChange={(e)=> setUserData({...userData, gender:e.target.value})}
@@ -49,8 +62,9 @@ const Form = ()=>{
                  <TextField
                 type="date"
                 
-                value={userData.birthday}
-                onChange={(e)=> setUserData({...userData, birthdate:e.target.value})}
+                value={userData.birthdate}
+                onChange={(e)=> setUserData({...userData, birthdate:e.target.value, age:calculateAge(e.target.value)})}
+                
                 name="birthdate" 
                 variant="standard" 
                 label=" " 
@@ -58,7 +72,7 @@ const Form = ()=>{
                 <TextField
                 
                 value={userData.age}
-                onChange={(e)=> setUserData({...userData, age:e.target.value})}
+                
                 name="age" 
                 variant="standard" 
                 label="Age" 

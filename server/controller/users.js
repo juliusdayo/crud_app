@@ -1,3 +1,4 @@
+import  mongoose  from 'mongoose';
 import UserModel from '../models/users.js'
 
 export const getUsers = async (req, res)=> {
@@ -20,4 +21,14 @@ export const createUser = async (req,res)=>{
     }catch (error){
         res.status(409).json({message:error.message});
     }
+}
+
+export const deleteUser = async (req,res)=>{
+    const {id} = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('Cannot be deleted');
+
+    await UserModel.findByIdAndRemove(id);
+
+    res.json({message: 'Deleted Successfully'})
 }

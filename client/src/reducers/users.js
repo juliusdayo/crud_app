@@ -6,6 +6,8 @@
             return action.payload;
         case 'CREATE':
             return [...users,action.payload];
+        case 'DELETE':
+            return users.filter((user) => user._id !== action.payload);
         default:
             return users;
     }
