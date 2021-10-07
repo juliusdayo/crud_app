@@ -1,6 +1,6 @@
 
 import { useDispatch } from "react-redux";
-import React,{ useEffect } from "react";
+import React,{ useState,useEffect } from "react";
 
 import {getUsers} from './actions/users';
 
@@ -10,8 +10,10 @@ import Form from './components/UserForm/Form';
 
 
 function Main(){
-
+    const [currentId, setCurrentId] = useState(null);
     const dispatch = useDispatch();
+
+
     useEffect(()=>{
         dispatch(getUsers());
     },[dispatch]);
@@ -20,10 +22,10 @@ function Main(){
         <Container>
             <Grid container spacing={5}>
                 <Grid item xs>
-                   <Form/>
+                   <Form currentId={currentId} setCurrentId={setCurrentId}/>
                 </Grid>
                 <Grid item xs={7}>
-                    <Users/>
+                    <Users setCurrentId={setCurrentId}/>
                 </Grid>
             </Grid>
         

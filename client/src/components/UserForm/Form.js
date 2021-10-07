@@ -1,27 +1,34 @@
 import {Paper,TextField,Card,CardHeader,Button} from '@mui/material';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React,{ useState } from 'react';
+import { useDispatch  } from 'react-redux';
+
+
 import { createUser } from '../../actions/users';
-const Form = ()=>{
-    const [userData,setUserData ] = useState({
-        firstName: '', lastName:'', gender:'',age:'',birthdate:''
-    });
+
+const Form = (currentId, setCurrentId) =>{
+    const [userData,setUserData ] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
+    ;
     const dispatch = useDispatch();
     
+    
+
     const handleSubmit =(e)=>{
         e.preventDefault();
-
-        dispatch(createUser(userData))
-        console.log(userData)
+        
+            console.log(currentId)
+            dispatch(createUser(userData))           
+    
     }
+
     const calculateAge = (date) =>{
         const birthdate = new Date(date);
         const monthDiff = Date.now() - birthdate.getTime();
         const ageDiff  = new Date(monthDiff);
         const year = ageDiff.getUTCFullYear();
-        const aget = Math.abs(year-1970);
-        setUserData({...userData,age:aget})
-        console.log(aget)
+        const aget = year-1970;
+        if(aget<0 || aget===NaN){
+            return 'Invalid Birthdate'
+        }
         return aget
         
     }

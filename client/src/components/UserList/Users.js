@@ -1,11 +1,52 @@
-import { useSelector } from "react-redux"
-import {Button,Paper,Table, TableBody, TableCell,TableContainer, TableHead,TableRow} from '@mui/material';
+import { useSelector, useStore } from "react-redux"
 import { useDispatch } from "react-redux";
 import { deleteUser } from "../../actions/users";
-
+import {Modal,Button,Paper,Box,Table, TableBody, TableCell,TableContainer, TableHead,TableRow} from '@mui/material';
+import {TextField,Card,CardHeader} from '@mui/material';
+import { useState } from "react";
+import Form from "../UserForm/Form";
 const Users = () => {
-    const users = useSelector((state) => state.users);
+
+    const [modalData, setModalData] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
+    const [open, setOpen] = useState(false);
+    const handleOpen = () =>setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const calculateAge = (date) =>{
+        const birthdate = new Date(date);
+        const monthDiff = Date.now() - birthdate.getTime();
+        const ageDiff  = new Date(monthDiff);
+        const year = ageDiff.getUTCFullYear();
+        const aget = year-1970;
+        if(aget<0 || aget===NaN){
+            return 'Invalid Birthdate'
+        }
+        return aget
+        
+    }
+    const handleSubmit =(e)=>{
+        e.preventDefault();
+        
+            
+                      
+    
+    }
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+      };
     const dispatch = useDispatch();
+    const users = useSelector((state) => state.users);
+
+
    const list = users.map((user,key)=>
    <TableRow key={key}>
        <TableCell>
@@ -28,13 +69,72 @@ const Users = () => {
        </TableCell>
        <TableCell>
            <Button onClick={()=>dispatch(deleteUser(user._id))}>Delete</Button>
+           <Button onClick={()=>setModalData({firstName:user.firstName}),handleOpen}>Update</Button>
+           
        </TableCell>
     </TableRow>
     )
-        
-   
+    
+    const modal = (
+        <Modal open={open} onClose={handleClose}>
+        <Box sx={style}>
+        <form>
+            <Card variant="dark">
+                <CardHeader title="Update User"/>
+{/* First Name */}
+                <TextField v
+                value={modalData.firstName} 
+                name="firstName" 
+                variant="standard" 
+                label="First Name" 
+                size="small"
+                onChange={(e)=> setModalData({...modalData, firstName:e.target.value})} />
+{/* Last Name */}
+                <TextField 
+                value={modalData.lastName}
+                onChange={(e)=> setModalData({...modalData, lastName:e.target.value})} 
+                name="lastName" 
+                variant="standard" 
+                label="Last Name" 
+                size="small"
+                required/>
+                <TextField 
+                value={modalData.gender}
+                onChange={(e)=> setModalData({...modalData, gender:e.target.value})}
+                name="gender" 
+                variant="standard" 
+                label="Gender" 
+                size="small"/>
+                 <TextField
+                type="date"
+                
+                value={modalData.birthdate}
+                onChange={(e)=> setModalData({...modalData, birthdate:e.target.value, age:calculateAge(e.target.value)})}
+                
+                name="birthdate" 
+                variant="standard" 
+                label=" " 
+                size="small"/>
+                <TextField
+                
+                value={modalData.age}
+                
+                name="age" 
+                variant="standard" 
+                label="Age" 
+                size="small"/>
+                
+                
+               <Button type="submit" variant="contained" onClick={handleSubmit} >Submit</Button>
+            </Card>
+            </form>
+        </Box>
+        </Modal>
+        )
+
     return(
         <Paper>
+            {modal}
             <TableContainer>
                 <Table>
                     <TableHead>
