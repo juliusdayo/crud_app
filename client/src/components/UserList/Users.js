@@ -1,9 +1,5 @@
-import { useSelector } from "react-redux"
-import {Button,Paper,Table, TableBody, TableCell,TableContainer, TableHead,TableRow} from '@mui/material';
+import { useSelector, useStore } from "react-redux"
 import { useDispatch } from "react-redux";
-<<<<<<< Updated upstream
-import { deleteUser } from "../../actions/users";
-=======
 import { deleteUser,updateUser } from "../../actions/users";
 import {Modal,Button,Paper,Box,Table, TableBody, TableCell,TableContainer, TableHead,TableRow} from '@mui/material';
 import {TextField,Card,CardHeader} from '@mui/material';
@@ -35,11 +31,49 @@ const Users = () => {
         dispatch(updateUser(currentId,modalData))
     }
    
->>>>>>> Stashed changes
 
 const Users = () => {
-    const users = useSelector((state) => state.users);
+
+    const [modalData, setModalData] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
+    const [open, setOpen] = useState(false);
+    const handleOpen = () =>setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const calculateAge = (date) =>{
+        const birthdate = new Date(date);
+        const monthDiff = Date.now() - birthdate.getTime();
+        const ageDiff  = new Date(monthDiff);
+        const year = ageDiff.getUTCFullYear();
+        const aget = year-1970;
+        if(aget<0 || aget===NaN){
+            return 'Invalid Birthdate'
+        }
+        return aget
+        
+    }
+    const handleSubmit =(e)=>{
+        e.preventDefault();
+        
+            
+                      
+    
+    }
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+      };
     const dispatch = useDispatch();
+    const users = useSelector((state) => state.users);
+
+
    const list = users.map((user,key)=>
    <TableRow key={key}>
        <TableCell>
@@ -62,13 +96,7 @@ const Users = () => {
        </TableCell>
        <TableCell>
            <Button onClick={()=>dispatch(deleteUser(user._id))}>Delete</Button>
-<<<<<<< Updated upstream
-       </TableCell>
-    </TableRow>
-    )
-        
-   
-=======
+
            <Button onClick={handleOpen}
            onMouseUp={()=>setModalData({...modalData, ...user})} value={user._id}>Update</Button>
            
@@ -77,6 +105,7 @@ const Users = () => {
     )
     
     const modal = (
+
 
         <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
@@ -134,9 +163,10 @@ const Users = () => {
         </Modal>
         )
 
->>>>>>> Stashed changes
+
     return(
         <Paper>
+            {modal}
             <TableContainer>
                 <Table>
                     <TableHead>

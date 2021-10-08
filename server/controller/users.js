@@ -32,3 +32,13 @@ export const deleteUser = async (req,res)=>{
 
     res.json({message: 'Deleted Successfully'})
 }
+
+export const updateUser = async (req,res) =>{
+    const {id:_id} =req.params;
+    const user = req.body;
+    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('Failed To Update');
+
+    const updatedUser = await UserModel.findByIdAndUpdate(_id,{...user,_id},{new:true});
+
+    res.json(updatedUser);
+}
