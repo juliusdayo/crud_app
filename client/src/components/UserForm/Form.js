@@ -5,10 +5,6 @@ import { useDispatch  } from 'react-redux';
 
 import { createUser } from '../../actions/users';
 
-const Form = ()=>{
-    const [userData,setUserData ] = useState({
-        firstName: '', lastName:'', gender:'',age:'',birthdate:''
-    });
 
 
 const Form = (currentId, setCurrentId) =>{

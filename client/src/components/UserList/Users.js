@@ -32,32 +32,7 @@ const Users = () => {
     }
    
 
-const Users = () => {
 
-    const [modalData, setModalData] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
-    const [open, setOpen] = useState(false);
-    const handleOpen = () =>setOpen(true);
-    const handleClose = () => setOpen(false);
-
-    const calculateAge = (date) =>{
-        const birthdate = new Date(date);
-        const monthDiff = Date.now() - birthdate.getTime();
-        const ageDiff  = new Date(monthDiff);
-        const year = ageDiff.getUTCFullYear();
-        const aget = year-1970;
-        if(aget<0 || aget===NaN){
-            return 'Invalid Birthdate'
-        }
-        return aget
-        
-    }
-    const handleSubmit =(e)=>{
-        e.preventDefault();
-        
-            
-                      
-    
-    }
 
     const style = {
         position: 'absolute',
