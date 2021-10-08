@@ -2,10 +2,18 @@ import {Paper,TextField,Card,CardHeader,Button} from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createUser } from '../../actions/users';
+<<<<<<< Updated upstream
 const Form = ()=>{
     const [userData,setUserData ] = useState({
         firstName: '', lastName:'', gender:'',age:'',birthdate:''
     });
+=======
+
+const Form = (currentId, setCurrentId) =>{
+    const [userData,setUserData ] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
+    ;
+    
+>>>>>>> Stashed changes
     const dispatch = useDispatch();
     
     const handleSubmit =(e)=>{
