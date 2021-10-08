@@ -1,10 +1,37 @@
 import { useSelector, useStore } from "react-redux"
 import { useDispatch } from "react-redux";
-import { deleteUser } from "../../actions/users";
+import { deleteUser,updateUser } from "../../actions/users";
 import {Modal,Button,Paper,Box,Table, TableBody, TableCell,TableContainer, TableHead,TableRow} from '@mui/material';
 import {TextField,Card,CardHeader} from '@mui/material';
 import { useState } from "react";
-import Form from "../UserForm/Form";
+
+const Users = () => {
+
+    const [modalData, setModalData] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
+    const [open, setOpen] = useState(false);
+    const [currentId, setCurrentId] = useState(null);
+    const handleOpen = (e) =>{setOpen(true); console.log(modalData); setCurrentId(e.target.value)};
+    const handleClose = () => setOpen(false);
+
+    const calculateAge = (date) =>{
+        const birthdate = new Date(date);
+        const monthDiff = Date.now() - birthdate.getTime();
+        const ageDiff  = new Date(monthDiff);
+        const year = ageDiff.getUTCFullYear();
+        const aget = year-1970;
+        if(aget<0 || aget==='NaN'){
+            return 'Invalid Birthdate'
+        }
+        return aget
+        
+    }
+    const handleSubmit =(e)=>{
+        e.preventDefault();
+        
+        dispatch(updateUser(currentId,modalData))
+    }
+   
+
 const Users = () => {
 
     const [modalData, setModalData] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
@@ -69,13 +96,17 @@ const Users = () => {
        </TableCell>
        <TableCell>
            <Button onClick={()=>dispatch(deleteUser(user._id))}>Delete</Button>
-           <Button onClick={()=>setModalData({firstName:user.firstName}),handleOpen}>Update</Button>
+
+           <Button onClick={handleOpen}
+           onMouseUp={()=>setModalData({...modalData, ...user})} value={user._id}>Update</Button>
            
        </TableCell>
     </TableRow>
     )
     
     const modal = (
+
+
         <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
         <form>
@@ -131,6 +162,7 @@ const Users = () => {
         </Box>
         </Modal>
         )
+
 
     return(
         <Paper>
