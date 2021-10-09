@@ -1,8 +1,8 @@
-import { useSelector, useStore } from "react-redux"
+import { useSelector} from "react-redux"
 import { useDispatch } from "react-redux";
 import { deleteUser,updateUser } from "../../actions/users";
 import {Modal,Button,Paper,Box,Table, TableBody, TableCell,TableContainer, TableHead,TableRow} from '@mui/material';
-import {TextField,Card,CardHeader} from '@mui/material';
+import {TextField,Card,CardHeader,Radio,RadioGroup,FormControl,FormControlLabel,FormLabel} from '@mui/material';
 import { useState } from "react";
 
 const Users = () => {
@@ -19,7 +19,7 @@ const Users = () => {
         const ageDiff  = new Date(monthDiff);
         const year = ageDiff.getUTCFullYear();
         const aget = year-1970;
-        if(aget<0 || aget==='NaN'){
+        if(aget<0 || isNaN(aget)){
             return 'Invalid Birthdate'
         }
         return aget
@@ -29,6 +29,7 @@ const Users = () => {
         e.preventDefault();
         
         dispatch(updateUser(currentId,modalData))
+        handleClose();
     }
    
 
@@ -104,13 +105,20 @@ const Users = () => {
                 label="Last Name" 
                 size="small"
                 required/>
-                <TextField 
-                value={modalData.gender}
-                onChange={(e)=> setModalData({...modalData, gender:e.target.value})}
-                name="gender" 
-                variant="standard" 
-                label="Gender" 
-                size="small"/>
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">Gender</FormLabel>
+                    <RadioGroup
+                        row
+                        aria-label="gender"
+                        defaultValue="female"
+                        name="radio-buttons-group"
+                        value={modalData.gender}
+                        onChange={(e)=> setModalData({...modalData, gender:e.target.value})}
+                    >
+                        <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                        <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                    </RadioGroup>
+                    </FormControl>
                  <TextField
                 type="date"
                 
@@ -122,7 +130,7 @@ const Users = () => {
                 label=" " 
                 size="small"/>
                 <TextField
-                
+                disabled
                 value={modalData.age}
                 
                 name="age" 

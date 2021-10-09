@@ -1,13 +1,11 @@
-import {Paper,TextField,Card,CardHeader,Button} from '@mui/material';
+import {Paper,TextField,Card,CardHeader,Button, Radio,RadioGroup,FormControl,FormControlLabel,FormLabel} from '@mui/material';
 import React,{ useState } from 'react';
 import { useDispatch  } from 'react-redux';
-
-
 import { createUser } from '../../actions/users';
 
 
 
-const Form = (currentId, setCurrentId) =>{
+const Form = () =>{
     const [userData,setUserData ] = useState({firstName: '', lastName:'', gender:'',age:'',birthdate: ''});
     ;
     const dispatch = useDispatch();
@@ -17,7 +15,7 @@ const Form = (currentId, setCurrentId) =>{
     const handleSubmit =(e)=>{
         e.preventDefault();
         
-            console.log(currentId)
+            console.log(userData)
             dispatch(createUser(userData))           
     
     }
@@ -28,7 +26,7 @@ const Form = (currentId, setCurrentId) =>{
         const ageDiff  = new Date(monthDiff);
         const year = ageDiff.getUTCFullYear();
         const aget = year-1970;
-        if(aget<0 || aget===NaN){
+        if(aget<0 || isNaN(aget)){
             return 'Invalid Birthdate'
         }
         return aget
@@ -61,13 +59,21 @@ const Form = (currentId, setCurrentId) =>{
                 label="Last Name" 
                 size="small"
                 required/>
-                <TextField 
-                value={userData.gender}
-                onChange={(e)=> setUserData({...userData, gender:e.target.value})}
-                name="gender" 
-                variant="standard" 
-                label="Gender" 
-                size="small"/>
+                
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">Gender</FormLabel>
+                    <RadioGroup
+                        row
+                        aria-label="gender"
+                        defaultValue="female"
+                        name="radio-buttons-group"
+                        value={userData.gender}
+                        onChange={(e)=> setUserData({...userData, gender:e.target.value})}
+                    >
+                        <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                        <FormControlLabel value="Male" control={<Radio />} label="Male" />
+                    </RadioGroup>
+                    </FormControl>
                  <TextField
                 type="date"
                 
@@ -79,7 +85,7 @@ const Form = (currentId, setCurrentId) =>{
                 label=" " 
                 size="small"/>
                 <TextField
-                
+                disabled
                 value={userData.age}
                 
                 name="age" 
